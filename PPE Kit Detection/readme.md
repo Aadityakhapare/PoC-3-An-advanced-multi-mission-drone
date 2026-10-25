@@ -149,3 +149,6 @@ Developed as a computer-vision and deep-learning project.
 
 ### Final PPE Detection
 ![PPE Detection](results/final_detection.png)
+
+### Final Working Video
+[Final_Working.zip](https://github.com/user-attachments/files/33934296/Final_Working.zip)
