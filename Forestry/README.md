@@ -98,3 +98,6 @@ Ensure label class IDs match the class order in `configs/data.yaml`.
 - Model predictions can be wrong; evaluate on representative footage before relying on them.
 
 Docs: https://docs.ultralytics.com/ and https://pytorch.org/get-started/locally/
+
+## Current Results
+<img width="1535" height="862" alt="Screenshot 2026-10-25 172902" src="https://github.com/user-attachments/assets/49c5844a-25ef-4f56-8221-125fa71883c4" />
