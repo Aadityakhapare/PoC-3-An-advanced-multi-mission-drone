@@ -1,3 +1,4 @@
+
 import streamlit as st
 from ultralytics import YOLO
 import tempfile
@@ -38,6 +39,131 @@ def load_model():
 
 
 model = load_model()
+
+# --------------------------------------------------
+# CUSTOM ANNOTATION COLORS
+# OpenCV uses BGR color format
+# --------------------------------------------------
+CLASS_COLORS = {
+    0: (0, 200, 0),      # Helmet: GREEN
+    1: (255, 0, 0),      # Person: BLUE
+    2: (0, 0, 230)       # Safety Vest: RED
+}
+
+# --------------------------------------------------
+# CUSTOM BOXES AND LABELS
+# --------------------------------------------------
+def draw_ppe_detections(result):
+    image = result.orig_img.copy()
+    height, width = image.shape[:2]
+
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = max(0.4, min(width, height) / 1200.0)
+    text_thickness = 1
+    box_thickness = 2
+    padding = 4
+
+    detections = []
+
+    if result.boxes is not None:
+        for box in result.boxes:
+            x1, y1, x2, y2 = map(
+                int, box.xyxy[0].tolist()
+            )
+
+            class_id = int(box.cls.item())
+            confidence = float(box.conf.item())
+
+            class_name = str(
+                model.names.get(class_id, class_id)
+            )
+
+            color = CLASS_COLORS.get(
+                class_id, (255, 255, 255)
+            )
+
+            label = f"{class_name} {confidence:.2f}"
+
+            # Keep bounding box coordinates inside the frame
+            x1 = max(0, min(x1, width - 1))
+            y1 = max(0, min(y1, height - 1))
+            x2 = max(0, min(x2, width - 1))
+            y2 = max(0, min(y2, height - 1))
+
+            detections.append(
+                (x1, y1, x2, y2, label, color)
+            )
+
+    # Draw all bounding boxes first
+    for x1, y1, x2, y2, label, color in detections:
+        cv2.rectangle(
+            image,
+            (x1, y1),
+            (x2, y2),
+            color,
+            box_thickness
+        )
+
+    # Draw colored label backgrounds and white text
+    for x1, y1, x2, y2, label, color in detections:
+        (text_w, text_h), baseline = cv2.getTextSize(
+            label,
+            font,
+            font_scale,
+            text_thickness
+        )
+
+        label_w = text_w + 2 * padding
+        label_h = text_h + baseline + 2 * padding
+
+        # Keep labels inside the video frame horizontally
+        label_x = max(
+            0,
+            min(x1, max(0, width - label_w))
+        )
+
+        # Prefer placing the label above the box
+        label_top = y1 - label_h - 2
+
+        # If there is no space above, place it below
+        if label_top < 0:
+            label_top = y2 + 2
+
+        # If there is no space below, place it near the box
+        if label_top + label_h >= height:
+            label_top = max(0, y1)
+
+        label_top = max(0, min(label_top, height - 1))
+        label_bottom = min(height - 1, label_top + label_h)
+        label_right = min(width - 1, label_x + label_w)
+
+        # Matching color label background
+        cv2.rectangle(
+            image,
+            (label_x, label_top),
+            (label_right, label_bottom),
+            color,
+            thickness=-1
+        )
+
+        # White label text
+        text_y = min(
+            height - baseline - 1,
+            label_top + padding + text_h
+        )
+
+        cv2.putText(
+            image,
+            label,
+            (label_x + padding, text_y),
+            font,
+            font_scale,
+            (255, 255, 255),
+            text_thickness,
+            cv2.LINE_AA
+        )
+
+    return image
 
 # --------------------------------------------------
 # VIDEO UPLOAD
@@ -187,24 +313,14 @@ if uploaded_file is not None:
             max_helmets = max(max_helmets, helmets)
             max_vests = max(max_vests, vests)
 
-            # Draw bounding boxes
-            annotated_frame = result.plot(
-                line_width=2,
-                font_size=0.6,
-                labels=True,
-                conf=True
-            )
-
-            annotated_frame = cv2.resize(
-                annotated_frame,
-                (output_width, output_height)
-            )
+            # Custom colored bounding boxes and label backgrounds
+            annotated_frame = draw_ppe_detections(result)
 
             writer.write(annotated_frame)
 
             # Progress
             progress = min(
-                frame_number / total_frames,
+                frame_number / max(total_frames, 1),
                 1.0
             )
 
