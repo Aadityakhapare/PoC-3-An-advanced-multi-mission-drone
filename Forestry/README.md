@@ -10,7 +10,7 @@ YOLOv8 object detection project for:
 Python 3.10 or 3.11 recommended.
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone REPOSITORY_URL
 cd Forestry
 python -m venv .venv
 ```
