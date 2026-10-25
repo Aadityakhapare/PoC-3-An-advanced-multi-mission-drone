@@ -126,6 +126,8 @@ Open the local URL shown in the terminal, normally `http://localhost:8501`.
 Developed as a computer-vision and deep-learning project.
 
 ## Results and Screenshots
+### Overall model performance
+<img width="1028" height="312" alt="image" src="https://github.com/user-attachments/assets/f200d63c-da11-4784-a8c8-f01f025d4a08" />
 
 ### Training Results
 ![Training Results](results/results.png)
