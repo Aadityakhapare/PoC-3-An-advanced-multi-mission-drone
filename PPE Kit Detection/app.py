@@ -158,8 +158,9 @@ if uploaded_file is not None:
             # YOLO inference
             results = model.predict(
                 frame_resized,
-                conf=0.25,
+                conf=0.30,
                 imgsz=384,
+                iou=0.50,
                 device="cpu",
                 verbose=False
             )
@@ -172,17 +173,13 @@ if uploaded_file is not None:
             vests = 0
 
             if result.boxes is not None:
-
                 for cls in result.boxes.cls:
-
                     class_id = int(cls)
 
                     if class_id == 0:
                         helmets += 1
-
                     elif class_id == 1:
                         persons += 1
-
                     elif class_id == 2:
                         vests += 1
 
@@ -191,7 +188,12 @@ if uploaded_file is not None:
             max_vests = max(max_vests, vests)
 
             # Draw bounding boxes
-            annotated_frame = result.plot()
+            annotated_frame = result.plot(
+                line_width=2,
+                font_size=0.6,
+                labels=True,
+                conf=True
+            )
 
             annotated_frame = cv2.resize(
                 annotated_frame,
