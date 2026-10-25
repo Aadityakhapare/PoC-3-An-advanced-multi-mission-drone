@@ -119,6 +119,12 @@ The trained model was tested on images and video to inspect its fire and smoke d
 
 Image testing was used to check whether the model could identify fire and smoke and display bounding boxes around detected objects.
 
+#### Annotated Test Image
+
+The following image shows an example of the trained YOLOv8 model's fire and smoke detection output, including the predicted bounding boxes and confidence scores.
+
+![Annotated Fire and Smoke Detection Result](Fire_Smoke_Detection.jpg)
+
 ### Video Testing
 
 The model was also tested on a video containing 495 frames. Video inference was used to inspect predictions across successive frames.
