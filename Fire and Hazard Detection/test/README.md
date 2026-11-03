@@ -209,36 +209,3 @@ Replace `test_video.mp4` with the path to your video file.
 
 The prediction output is saved by Ultralytics when `save=True` is enabled. These examples assume that the model weights and input files are accessible from the current working directory.
 
-## 12. Limitations
-
-- The model's performance depends on the quality and diversity of the training dataset.
-- Smoke can be difficult to distinguish from clouds, fog, dust, and other visually similar objects.
-- Fire detection performance may vary with flame size, lighting, distance, and environmental conditions.
-- The reported evaluation results do not establish reliability in every real-world scenario.
-- Live drone deployment and real-time performance must be evaluated separately before operational use.
-
-## 13. Future Improvements
-
-Potential improvements include:
-
-- Expanding the dataset with diverse fire and smoke examples.
-- Improving the representation of small, distant, and early-stage fires.
-- Adding challenging background examples to reduce false detections.
-- Improving recall, precision, and overall detection performance.
-- Testing model performance on more varied images and videos.
-- Evaluating inference speed and resource requirements for drone hardware.
-- Integrating the detection module with a drone-based monitoring system after suitable validation.
-
-## 14. Applications
-
-Potential applications of fire and smoke detection include:
-
-- Forest and wildfire monitoring.
-- Industrial site inspection.
-- Fire hazard surveillance.
-- Monitoring difficult-to-access areas.
-- Drone-assisted visual inspection and emergency assessment.
-
-These are potential applications; operational suitability depends on further testing and validation.
-
-
