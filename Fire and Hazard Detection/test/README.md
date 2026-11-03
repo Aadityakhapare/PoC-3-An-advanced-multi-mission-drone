@@ -133,6 +133,8 @@ The reported testing activity included 18 images and a video containing 495 fram
 
 The results from these tests provide an initial assessment of model behavior. Broader testing with diverse environmental conditions is necessary before deployment.
 
+![Annotated Fire and Smoke Detection Result](Test_Video.mp4)
+
 ## 9. Project Files
 
 The folder contains the following files:
